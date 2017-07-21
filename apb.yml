@@ -1,0 +1,39 @@
+id: 75e3c0a7-f7b1-47d7-b137-3283f6fc736d
+name: bind-pq-apb
+image: shurley/rhscl-postgresql-apb
+description: SCL PostgreSQL apb implementation
+bindable: True
+async: optional
+metadata: 
+  documentationUrl: https://www.postgresql.org/docs/
+  longDescription: An apb that deploys postgresql 9.4 or 9.5.
+  dependencies: ['registry.access.redhat.com/rhscl/postgresql-95-rhel7']
+  displayName: Bind PostgreSQL (APB)
+  console.openshift.io/iconClass: icon-postgresql
+  
+parameters: 
+  - postgresql_database:
+      default: admin
+      type: string
+      title: PostgreSQL Database Name
+      
+  - postgresql_password:
+      type: string
+      description: A random alphanumeric string if left blank
+      title: PostgreSQL Password
+      
+  - postgresql_version:
+      default: 9.5
+      enum: ['9.5', '9.4']
+      type: enum
+      title: PostgreSQL Version
+      
+  
+required: 
+  - postgresql_database
+  - postgresql_version
+  
+dependencies: 
+  - postgresql_version
+  - registry.access.redhat.com/rhscl/{{
+  

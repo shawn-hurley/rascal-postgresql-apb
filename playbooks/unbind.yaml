@@ -1,0 +1,7 @@
+- name: unbind rhscl-postgresql-apb to application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  roles:
+  - role: unbind-rhscl-postgresql-apb-openshift
+    playbook_debug: true
