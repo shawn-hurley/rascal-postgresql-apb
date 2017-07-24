@@ -21,6 +21,12 @@ parameters:
       type: string
       description: A random alphanumeric string if left blank
       title: PostgreSQL Password
+  
+  - postgresql_single_user:
+      type: enum
+      description: Should the database create new user on each binding or re-use a single user.
+      title: Single User or Multiple Users
+      enum: ['single', 'multiple']
       
   - postgresql_version:
       default: 9.5
@@ -32,6 +38,7 @@ parameters:
 required: 
   - postgresql_database
   - postgresql_version
+  - postgresql_single_user
   
 dependencies: 
   - postgresql_version
