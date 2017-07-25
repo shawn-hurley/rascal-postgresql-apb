@@ -5,3 +5,4 @@
   roles:
   - role: unbind-rhscl-postgresql-apb-openshift
     playbook_debug: true
+    when: db_creds.USER_CREATION_TYPE == "multiple"

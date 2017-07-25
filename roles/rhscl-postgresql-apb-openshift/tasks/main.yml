@@ -104,14 +104,53 @@
     timeout: 300
   when: state == 'present'
 
+- set_fact: 
+    generated_user: "{{ lookup('password', '/tmp/gen_user chars=ascii_letters,digits length=8') }}"
+    generated_password: "{{ lookup('password', '/tmp/gen_pass chars=ascii_letters,digits') }}"
+  when: postgresql_single_user == "single"
+
+- set_fact: 
+    generated_user: postgres
+    generated_password: "{{ postgresql_password }}"
+  when: postgresql_single_user == "multiple"
+
+- name: ensure database is created
+  postgresql_db:
+    name: "{{ postgresql_database }}"
+    port: 5432
+    login_host: postgresql
+    login_user: postgres
+    login_password: "{{ postgresql_password }}"
+  when: postgresql_single_user == "single"
+
+- name: create database user
+  postgresql_user:
+    db: "{{ postgresql_database }}"
+    name: "{{ generated_user }}"
+    password: "{{ generated_password }}"
+    port: 5432
+    login_host: postgresql
+    login_user: postgres
+    login_password: "{{ postgresql_password }}"
+    encrypted: yes
+  when: postgresql_single_user == "single"
+
+- name: grant owner privillages on database
+  postgresql_privs:
+    db: "{{ postgresql_database }}"
+    port: 5432
+    role: "{{ generated_user }}"
+    login_host: postgresql
+    login_user: postgres
+    login_password: "{{ postgresql_password }}"
+    type: database
+    privs: ALL
+  when: postgresql_single_user == "single"
+    
 - name: encode bind credentials
-  shell: 'echo "{\"POSTGRESQL_HOST\": \"postgresql\", \"POSTGRESQL_PORT\": \"5432\", \"POSTGRESQL_USER\": \"postgres\", \"POSTGRESQL_PASSWORD\": \"{{ postgresql_password }}\", \"POSTGRESQL_DATABASE\": \"{{ postgresql_database }}\"}" | base64 -w 0'
+  shell: 'echo "{\"POSTGRESQL_HOST\": \"postgresql\", \"POSTGRESQL_PORT\": \"5432\", \"POSTGRESQL_USER\": \"{{ generated_user }}\", \"POSTGRESQL_PASSWORD\": \"{{ generated_password }}\", \"POSTGRESQL_DATABASE\": \"{{ postgresql_database }}\", \"USER_CREATION_TYPE\": \"{{ postgresql_single_user }}\"}" | base64 -w 0'
   register: encoded_bind_credentials
-  when: state == 'present'
 
 - copy:
     content: "{{ encoded_bind_credentials.stdout }}"
     dest: /var/tmp/bind-creds
-
-- pause:
-    minutes: 10
