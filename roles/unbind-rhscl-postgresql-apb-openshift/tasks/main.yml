@@ -1,23 +1,23 @@
 - name: remove owner privillages on database
   postgresql_privs:
-    db: "{{ db_creds.POSTGRESQL_DATABASE }}"
-    port: "{{ db_creds.POSTGRESQL_PORT }}"
+    db: "{{ _apb_provision_creds.POSTGRESQL_DATABASE }}"
+    port: "{{ _apb_provision_creds.POSTGRESQL_PORT }}"
     role: "{{ bind_creds.POSTGRESQL_USER }}"
-    login_host: "{{ db_creds.POSTGRESQL_HOST }}"
-    login_user: "{{ db_creds.POSTGRESQL_USER }}"
-    login_password: "{{ db_creds.POSTGRESQL_PASSWORD }}"
+    login_host: "{{ _apb_provision_creds.POSTGRESQL_HOST }}"
+    login_user: "{{ _apb_provision_creds.POSTGRESQL_USER }}"
+    login_password: "{{ _apb_provision_creds.POSTGRESQL_PASSWORD }}"
     type: database
     privs: ALL
     state: absent
 
 - name: delte database user
   postgresql_user:
-    db: "{{ db_creds.POSTGRESQL_DATABASE }}"
-    name: "{{ bind_creds.POSTGRESQL_USER }}"
-    password: "{{ bind_creds.POSTGRESQL_PASSWORD }}"
-    port: "{{ db_creds.POSTGRESQL_PORT }}"
-    login_host: "{{ db_creds.POSTGRESQL_HOST }}"
-    login_user: "{{ db_creds.POSTGRESQL_USER }}"
-    login_password: "{{ db_creds.POSTGRESQL_PASSWORD }}"
+    db: "{{ _apb_provision_creds.POSTGRESQL_DATABASE }}"
+    name: "{{ _apb_bind_creds.POSTGRESQL_USER }}"
+    password: "{{ _apb_bind_creds.POSTGRESQL_PASSWORD }}"
+    port: "{{ _apb_provision_creds.POSTGRESQL_PORT }}"
+    login_host: "{{ _apb_provision_creds.POSTGRESQL_HOST }}"
+    login_user: "{{ _apb_provision_creds.POSTGRESQL_USER }}"
+    login_password: "{{ _apb_provision_creds.POSTGRESQL_PASSWORD }}"
     encrypted: yes
     state: absent

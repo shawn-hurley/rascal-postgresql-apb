@@ -21,25 +21,25 @@ plans:
       cost: $0.00
 
     parameters: 
-      - postgresql_database:
+      - name: postgresql_database
         default: admin
         type: string
         title: PostgreSQL Database Name
-        required: true
+        required: True
       
-      - postgresql_password:
+      - name: postgresql_password
         type: string
         description: A random alphanumeric string if left blank
         title: PostgreSQL Password
           
-      - postgresql_single_user:
+      - name: postgresql_single_user
         type: enum
         description: Should the database create new user on each binding or re-use a single user.
         title: Single User or Multiple Users
         enum: ['single', 'multiple']
         required: true
               
-      - postgresql_version:
+      - name: postgresql_version
         default: 9.5
         enum: ['9.5', '9.4']
         type: enum
