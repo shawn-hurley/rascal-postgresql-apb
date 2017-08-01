@@ -11,35 +11,41 @@ metadata:
   displayName: Bind PostgreSQL (APB)
   console.openshift.io/iconClass: icon-postgresql
   
-parameters: 
-  - postgresql_database:
-      default: admin
-      type: string
-      title: PostgreSQL Database Name
+plans:
+  - name: default
+    description: A single etherpad application with no DB
+    free: true
+    metadata:
+      displayName: Default
+      longDescription: This plan provides a single Etherpad application with no database\
+      cost: $0.00
+
+    parameters: 
+      - postgresql_database:
+        default: admin
+        type: string
+        title: PostgreSQL Database Name
+        required: true
       
-  - postgresql_password:
-      type: string
-      description: A random alphanumeric string if left blank
-      title: PostgreSQL Password
-  
-  - postgresql_single_user:
-      type: enum
-      description: Should the database create new user on each binding or re-use a single user.
-      title: Single User or Multiple Users
-      enum: ['single', 'multiple']
+      - postgresql_password:
+        type: string
+        description: A random alphanumeric string if left blank
+        title: PostgreSQL Password
+          
+      - postgresql_single_user:
+        type: enum
+        description: Should the database create new user on each binding or re-use a single user.
+        title: Single User or Multiple Users
+        enum: ['single', 'multiple']
+        required: true
+              
+      - postgresql_version:
+        default: 9.5
+        enum: ['9.5', '9.4']
+        type: enum
+        required: true
+        title: PostgreSQL Version
       
-  - postgresql_version:
-      default: 9.5
-      enum: ['9.5', '9.4']
-      type: enum
-      title: PostgreSQL Version
-      
-  
-required: 
-  - postgresql_database
-  - postgresql_version
-  - postgresql_single_user
-  
 dependencies: 
   - postgresql_version
   - registry.access.redhat.com/rhscl/{{
